@@ -1,0 +1,21 @@
+{
+  "name": "aprentic-campus-api",
+  "version": "1.0.0",
+  "description": "AprenTIC Campus API es una API REST profesional para la gestión académica de un  bootcamp multi-campus, construida con Node.js, Express y MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josedavidfive/aprentic-campus-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/josedavidfive/aprentic-campus-api/issues"
+  },
+  "homepage": "https://github.com/josedavidfive/aprentic-campus-api#readme"
+}
