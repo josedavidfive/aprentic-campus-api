@@ -1,9 +1,10 @@
+
+
 {
   "name": "aprentic-campus-api",
   "version": "1.0.0",
-  "description": "AprenTIC Campus API es una API REST profesional para la gestión académica de un  bootcamp multi-campus, construida con Node.js, Express y MongoDB",
+  "description": "AprenTIC Campus API es una API REST profesional para la gestión académica de un bootcamp multi-campus, construida con Node.js, Express y MongoDB",
   "main": "src/server.js",
-  "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
