@@ -1,10 +1,14 @@
+
+
 {
   "name": "aprentic-campus-api",
   "version": "1.0.0",
-  "description": "AprenTIC Campus API es una API REST profesional para la gestión académica de un  bootcamp multi-campus, construida con Node.js, Express y MongoDB",
-  "main": "index.js",
+  "description": "AprenTIC Campus API es una API REST profesional para la gestión académica de un bootcamp multi-campus, construida con Node.js, Express y MongoDB",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -13,9 +17,23 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/josedavidfive/aprentic-campus-api/issues"
   },
-  "homepage": "https://github.com/josedavidfive/aprentic-campus-api#readme"
+  "homepage": "https://github.com/josedavidfive/aprentic-campus-api#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.3",
+    "multer": "^2.1.1",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
+  }
 }
