@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const proyectosController = require('../controllers/proyectos.controller');
-const authRequired = require('../middlewares/authRequired');
-const requireRole = require('../middlewares/requireRole');
+const authRequired = require('../middlewares/auth.required');
+const requireRole = require('../middlewares/role.required');
 
 router.get('/', authRequired, proyectosController.getAll);
 router.get('/:id', authRequired, proyectosController.getById);
