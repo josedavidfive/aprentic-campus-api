@@ -21,7 +21,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const newAlumno = await alumnosService.create(req.body);
+    const newAlumno = await alumnosService.crearAlumno(req.body);
     res.status(201).json(newAlumno);
   } catch (err) {
     next(err);
@@ -30,7 +30,7 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const updated = await alumnosService.update(req.params.id, req.body);
+    const updated = await alumnosService.actualizarAlumno(req.params.id, req.body);
     if (!updated) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json(updated);
   } catch (err) {
@@ -40,7 +40,7 @@ const update = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const deleted = await alumnosService.remove(req.params.id);
+    const deleted = await alumnosService.eliminarAlumno(req.params.id);
     if (!deleted) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json({ message: 'Alumno eliminado', alumno: deleted });
   } catch (err) {

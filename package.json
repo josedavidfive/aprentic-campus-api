@@ -1,5 +1,3 @@
-
-
 {
   "name": "aprentic-campus-api",
   "version": "1.0.0",
@@ -23,6 +21,7 @@
   "homepage": "https://github.com/josedavidfive/aprentic-campus-api#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "csv-parse": "^6.2.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",

@@ -21,7 +21,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const newPromocion = await promocionesService.create(req.body);
+    const newPromocion = await promocionesService.crearPromocion(req.body);
     res.status(201).json(newPromocion);
   } catch (err) {
     next(err);
@@ -30,7 +30,7 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const updated = await promocionesService.update(req.params.id, req.body);
+    const updated = await promocionesService.actualizarPromocion(req.params.id, req.body);
     if (!updated) return res.status(404).json({ error: 'Promoción no encontrada' });
     res.json(updated);
   } catch (err) {
@@ -40,7 +40,7 @@ const update = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const deleted = await promocionesService.remove(req.params.id);
+    const deleted = await promocionesService.eliminarPromocion(req.params.id);
     if (!deleted) return res.status(404).json({ error: 'Promoción no encontrada' });
     res.json({ message: 'Promoción eliminada', promocion: deleted });
   } catch (err) {
