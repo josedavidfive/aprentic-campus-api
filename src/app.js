@@ -8,13 +8,19 @@ const proyectosRoutes = require('./routes/proyectos.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const errorHandler = require('./middlewares/errorHandler');
 
+// Registrar todos los models
+require('./models/Campus');
+require('./models/Usuario');
+require('./models/Alumno');
+require('./models/Profesor');
+require('./models/Promocion');
+require('./models/Proyecto');
 
-app.use(cors());
 const app = express();
-
 // Middlewares globales
 const cors = require('cors');
 app.use(express.json());
+app.use(cors());
 
 // Rutas
 app.use('/api/auth', authRoutes);
