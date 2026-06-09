@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AprenTIC Campus API</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <span class="logo-bracket">&lt;</span>
+                    AprenTIC
+                    <span class="logo-bracket">/&gt;</span>
+                </div>
+                <p class="login-subtitle">Campus API — Panel de control</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="admin@aprentic.com" required>
+                </div>
+                <div class="field">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <div id="login-error" class="error-msg hidden">Email o contraseña incorrectos</div>
+                <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-screen" class="screen">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-bracket">&lt;</span>
+                AprenTIC
+                <span class="logo-bracket">/&gt;</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="alumnos">
+                    <span class="nav-icon">👤</span> Alumnos
+                </button>
+                <button class="nav-item" data-section="profesores">
+                    <span class="nav-icon">🎓</span> Profesores
+                </button>
+                <button class="nav-item" data-section="promociones">
+                    <span class="nav-icon">📅</span> Promociones
+                </button>
+                <button class="nav-item" data-section="proyectos">
+                    <span class="nav-icon">📁</span> Proyectos
+                </button>
+                <button class="nav-item" data-section="analytics">
+                    <span class="nav-icon">📊</span> Analytics
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span id="user-role-badge" class="role-badge">admin</span>
+                    <span id="user-email-display"></span>
+                </div>
+                <button id="logout-btn" class="btn-logout">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- SECCIÓN ALUMNOS -->
+            <section id="section-alumnos" class="section active">
+                <div class="section-header">
+                    <h1>Alumnos</h1>
+                    <button class="btn-primary" id="btn-nuevo-alumno">+ Nuevo alumno</button>
+                </div>
+                <div id="alumnos-list" class="data-list">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN PROFESORES -->
+            <section id="section-profesores" class="section">
+                <div class="section-header">
+                    <h1>Profesores</h1>
+                    <button class="btn-primary" id="btn-nuevo-profesor">+ Nuevo profesor</button>
+                </div>
+                <div id="profesores-list" class="data-list">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN PROMOCIONES -->
+            <section id="section-promociones" class="section">
+                <div class="section-header">
+                    <h1>Promociones</h1>
+                    <button class="btn-primary" id="btn-nueva-promocion">+ Nueva promoción</button>
+                </div>
+                <div id="promociones-list" class="data-list">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN PROYECTOS -->
+            <section id="section-proyectos" class="section">
+                <div class="section-header">
+                    <h1>Proyectos</h1>
+                    <button class="btn-primary" id="btn-nuevo-proyecto">+ Nuevo proyecto</button>
+                </div>
+                <div id="proyectos-list" class="data-list">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN ANALYTICS -->
+            <section id="section-analytics" class="section">
+                <div class="section-header">
+                    <h1>Analytics</h1>
+                </div>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h2>Aptos por campus</h2>
+                        <div id="analytics-aptos" class="analytics-data">
+                            <button class="btn-secondary" onclick="cargarAptosPorCampus()">Cargar datos</button>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <h2>Alumnos en riesgo</h2>
+                        <div id="analytics-riesgo" class="analytics-data">
+                            <button class="btn-secondary" onclick="cargarAlumnosEnRiesgo()">Cargar datos</button>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <h2>Ranking no aptos</h2>
+                        <div id="analytics-ranking" class="analytics-data">
+                            <button class="btn-secondary" onclick="cargarRankingNoAptos()">Cargar datos</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
