@@ -147,6 +147,26 @@
         </main>
     </div>
 
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-titulo"></h2>
+                <button class="modal-close" onclick="cerrarModal()">✕</button>
+            </div>
+            <form id="modal-form">
+                <div id="modal-campos" class="modal-campos"></div>
+                <div class="modal-actions">
+                    <button type="button" id="modal-cancelar" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

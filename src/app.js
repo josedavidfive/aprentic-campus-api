@@ -8,14 +8,13 @@ const proyectosRoutes = require('./routes/proyectos.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const errorHandler = require('./middlewares/errorHandler');
 
+
+app.use(cors());
 const app = express();
 
 // Middlewares globales
-app.use(express.json());
-
-
 const cors = require('cors');
-app.use(cors());
+app.use(express.json());
 
 // Rutas
 app.use('/api/auth', authRoutes);
