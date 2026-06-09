@@ -2,7 +2,7 @@ const profesoresService = require('../services/profesores.service');
 
 const getAll = async (req, res, next) => {
   try {
-    const profesores = await profesoresService.findAll();
+    const profesores = await profesoresService.obtenerProfesores();
     res.json(profesores);
   } catch (err) {
     next(err);
@@ -11,7 +11,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const profesor = await profesoresService.findById(req.params.id);
+    const profesor = await profesoresService.obtenerProfesorPorId(req.params.id);
     if (!profesor) return res.status(404).json({ error: 'Profesor no encontrado' });
     res.json(profesor);
   } catch (err) {

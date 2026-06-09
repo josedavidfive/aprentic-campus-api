@@ -11,7 +11,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const proyecto = await proyectosService.findById(req.params.id);
+    const proyecto = await proyectosService.obtenerProyectoPorId(req.params.id);
     if (!proyecto) return res.status(404).json({ error: 'Proyecto no encontrado' });
     res.json(proyecto);
   } catch (err) {

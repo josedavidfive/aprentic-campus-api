@@ -2,7 +2,7 @@ const promocionesService = require('../services/promociones.service');
 
 const getAll = async (req, res, next) => {
   try {
-    const promociones = await promocionesService.findAll();
+    const promociones = await promocionesService.obtenerPromociones();
     res.json(promociones);
   } catch (err) {
     next(err);
@@ -11,7 +11,7 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const promocion = await promocionesService.findById(req.params.id);
+    const promocion = await promocionesService.obtenerPromocionPorId(req.params.id);
     if (!promocion) return res.status(404).json({ error: 'Promoción no encontrada' });
     res.json(promocion);
   } catch (err) {
