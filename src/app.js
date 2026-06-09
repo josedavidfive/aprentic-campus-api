@@ -13,6 +13,10 @@ const app = express();
 // Middlewares globales
 app.use(express.json());
 
+
+const cors = require('cors');
+app.use(cors());
+
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/alumnos', alumnosRoutes);

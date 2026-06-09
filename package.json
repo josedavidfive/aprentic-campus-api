@@ -21,6 +21,7 @@
   "homepage": "https://github.com/josedavidfive/aprentic-campus-api#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "csv-parse": "^6.2.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
