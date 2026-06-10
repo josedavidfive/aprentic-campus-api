@@ -155,10 +155,10 @@ const cargarAlumnos = async () => {
                 <span class="data-card-name">${a.nombre}</span>
                 <span class="data-card-sub">${a.email} · ${a.promocion?.nombre || 'Sin promoción'}</span>
             </div>
-            ${esAdmin() ? `
+            ${esAdmin() || getRol() === 'profesor' ? `
             <div class="data-card-actions">
                 <button class="btn-edit" onclick="editarAlumno('${a._id}', '${a.nombre}', '${a.email}', '${a.promocion?._id || ''}')">Editar</button>
-                <button class="btn-delete" onclick="eliminarAlumno('${a._id}', '${a.nombre}')">Eliminar</button>
+                ${esAdmin() ? `<button class="btn-delete" onclick="eliminarAlumno('${a._id}', '${a.nombre}')">Eliminar</button>` : ''}
             </div>` : ''}
         </div>
     `).join('');
@@ -200,10 +200,35 @@ document.getElementById('btn-nuevo-alumno').addEventListener('click', async () =
 });
 
 const editarAlumno = async (id, nombre, email, promocionId) => {
-    const promociones = await fetchAPI('/promociones');
+    const [promociones, proyectos] = await Promise.all([
+        fetchAPI('/promociones'),
+        fetchAPI('/proyectos')
+    ]);
+
     const opcionesPromocion = promociones?.map(p =>
         `<option value="${p._id}" ${p._id === promocionId ? 'selected' : ''}>${p.nombre}</option>`
     ).join('') || '';
+
+    // Solo proyectos de la misma promoción
+    const proyectosDePromocion = proyectos?.filter(p =>
+        p.promocion?._id?.toString() === promocionId.toString()
+    ) || [];
+
+    const checkboxesProyectos = proyectosDePromocion.length > 0
+        ? `<table style="width:100%; border-collapse:collapse;">
+        ${proyectosDePromocion.map(p => {
+            const yaInscrito = p.notas?.some(n => n.alumno?._id?.toString() === id.toString());
+            return `<tr>
+                <td style="width:30px; padding:6px 0;">
+                    <input type="checkbox" value="${p._id}" ${yaInscrito ? 'checked disabled' : ''}>
+                </td>
+                <td style="padding:6px 0; font-size:0.875rem;">
+                    ${p.nombre} ${yaInscrito ? '<span style="color:var(--text-secondary)">(ya inscrito)</span>' : ''}
+                </td>
+            </tr>`;
+        }).join('')}
+       </table>`
+        : '<p class="confirm-msg">No hay proyectos en esta promoción</p>';
 
     abrirModal('Editar alumno', `
         <div class="field">
@@ -214,22 +239,41 @@ const editarAlumno = async (id, nombre, email, promocionId) => {
             <label>Email</label>
             <input type="email" id="f-email" value="${email}" required>
         </div>
-        <div class="field">
+            <div class="field">
             <label>Promoción</label>
-            <select id="f-promocion" required>
-                ${opcionesPromocion}
-            </select>
+            <input type="text" value="${promociones?.find(p => p._id === promocionId)?.nombre || 'Sin promoción'}" 
+                readonly style="opacity:0.5; cursor:not-allowed">
+        </div>
+        <div class="field">
+            <label>Inscribir en proyectos</label>
+            <div class="checkbox-list">${checkboxesProyectos}</div>
         </div>
     `, async () => {
+        // 1. Actualiza datos del alumno
         const body = {
             nombre: document.getElementById('f-nombre').value,
             email: document.getElementById('f-email').value,
-            promocion: document.getElementById('f-promocion').value
+            //promocion: document.getElementById('f-promocion').value
         };
-        const res = await fetchAPI(`/alumnos/${id}`, { method: 'PUT', body: JSON.stringify(body) });
-        if (res?.error) return toast(res.error, 'error');
+        const resAlumno = await fetchAPI(`/alumnos/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        if (resAlumno?.error) return toast(resAlumno.error, 'error');
+
+        // 2. Inscribe en proyectos seleccionados (solo los nuevos, no los ya inscritos)
+        const seleccionados = [...document.querySelectorAll('.checkbox-list input:checked:not(:disabled)')]
+            .map(cb => cb.value);
+
+        for (const proyectoId of seleccionados) {
+            await fetchAPI(`/proyectos/${proyectoId}/alumnos`, {
+                method: 'POST',
+                body: JSON.stringify({ alumnoId: id })
+            });
+        }
+
         cerrarModal();
-        toast('Alumno actualizado');
+        toast(seleccionados.length > 0
+            ? `Alumno actualizado e inscrito en ${seleccionados.length} proyecto(s)`
+            : 'Alumno actualizado'
+        );
         cargarAlumnos();
     });
 };
@@ -468,17 +512,19 @@ const cargarProyectos = async () => {
                 <span class="data-card-name">${p.nombre}</span>
                 <span class="data-card-sub">${p.promocion?.nombre || 'Sin promoción'} · ${p.notas?.length || 0} notas</span>
             </div>
-            ${esAdmin() ? `
             <div class="data-card-actions">
+                <button class="btn-secondary" onclick="gestionarNotas('${p._id}', '${p.nombre}', '${p.promocion?._id || ''}')">Notas</button>
+                ${esAdmin() ? `
                 <button class="btn-edit" onclick="editarProyecto('${p._id}', '${p.nombre}', '${p.promocion?._id || ''}')">Editar</button>
                 <button class="btn-delete" onclick="eliminarProyecto('${p._id}', '${p.nombre}')">Eliminar</button>
-            </div>` : ''}
+                ` : ''}
+            </div>
         </div>
     `).join('');
 };
 
 document.getElementById('btn-nuevo-proyecto').addEventListener('click', async () => {
-    if (!esAdmin()) return toast('Solo los administradores pueden crear proyectos', 'error');
+    if (!esAdmin() && getRol() !== 'profesor') return toast('Sin permisos para crear proyectos', 'error');
     const promociones = await fetchAPI('/promociones');
     const opcionesPromocion = promociones?.map(p => `<option value="${p._id}">${p.nombre}</option>`).join('') || '';
 
@@ -547,6 +593,76 @@ const eliminarProyecto = (id, nombre) => {
         toast('Proyecto eliminado');
         cargarProyectos();
     });
+};
+
+const gestionarNotas = async (proyectoId, proyectoNombre, promocionId) => {
+
+    // Si el proyecto no tiene promoción, avisamos y salimos
+    if (!promocionId) {
+        return toast('Este proyecto no tiene promoción asignada, asígnale una antes de añadir notas', 'error');
+    }
+
+    const alumnos = await fetchAPI('/alumnos');
+    if (!alumnos) return;
+
+    // Fix: comparar como strings para evitar problemas con ObjectId
+    const alumnosFiltrados = alumnos.filter(a =>
+        a.promocion?._id?.toString() === promocionId.toString()
+    );
+
+    if (alumnosFiltrados.length === 0) {
+        return toast('No hay alumnos inscritos en la promoción de este proyecto', 'error');
+    }
+
+    const opcionesAlumnos = alumnosFiltrados.map(a =>
+        `<option value="${a._id}">${a.nombre}</option>`
+    ).join('');
+
+    abrirModal(`Añadir nota — ${proyectoNombre}`, `
+        <div class="field">
+            <label>Alumno</label>
+            <select id="f-alumno" required>
+                <option value="">Selecciona un alumno</option>
+                ${opcionesAlumnos}
+            </select>
+        </div>
+        <div class="field">
+            <label>Nota (0 - 10)</label>
+            <input type="number" id="f-nota" min="0" max="10" step="0.1" placeholder="7.5" required>
+        </div>
+        <div class="field">
+            <label>Estado</label>
+            <input type="text" id="f-estado" readonly style="opacity:0.5; cursor:not-allowed" value="Introduce una nota">
+        </div>
+    `, async () => {
+        const nota = parseFloat(document.getElementById('f-nota').value);
+        const estado = nota >= 5 ? 'Apto' : 'No Apto';
+        const body = {
+            alumno: document.getElementById('f-alumno').value,
+            nota,
+            estado,
+            profesor: null
+        };
+        const res = await fetchAPI(`/proyectos/${proyectoId}/notas`, {
+            method: 'POST',
+            body: JSON.stringify(body)
+        });
+        if (res?.error) return toast(res.error, 'error');
+        cerrarModal();
+        toast(`Nota añadida — ${estado}`);
+        cargarProyectos();
+    });
+
+    setTimeout(() => {
+        const inputNota = document.getElementById('f-nota');
+        const inputEstado = document.getElementById('f-estado');
+        if (inputNota && inputEstado) {
+            inputNota.addEventListener('input', () => {
+                const v = parseFloat(inputNota.value);
+                if (!isNaN(v)) inputEstado.value = v >= 5 ? '✅ Apto' : '❌ No Apto';
+            });
+        }
+    }, 100);
 };
 
 // ══════════════════════════════════════════

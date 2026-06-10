@@ -68,4 +68,14 @@ const updateNota = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, getById, create, update, remove, addNota, updateNota };
+const inscribirAlumno = async (req, res, next) => {
+  try {
+    const proyecto = await proyectosService.inscribirAlumno(req.params.id, req.body.alumnoId);
+    if (!proyecto) return res.status(404).json({ error: 'Proyecto no encontrado' });
+    res.json(proyecto);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAll, getById, create, update, remove, addNota, updateNota, inscribirAlumno };

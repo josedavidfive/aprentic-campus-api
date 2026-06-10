@@ -11,5 +11,11 @@ const actualizarNota = (id, notaId, notaData) => Proyecto.findOneAndUpdate(
     { $set: { 'notas.$': notaData } },
     { new: true }
 );
+const inscribirAlumno = (id, alumnoId) =>
+    Proyecto.findByIdAndUpdate(
+        id,
+        { $push: { notas: { alumno: alumnoId, nota: null, estado: 'Pendiente', profesor: null } } },
+        { new: true }
+    );
 
-module.exports = { obtenerProyectos, obtenerProyectoPorId, crearProyecto, actualizarProyecto, eliminarProyecto, añadirNota, actualizarNota };
+module.exports = { obtenerProyectos, obtenerProyectoPorId, crearProyecto, actualizarProyecto, eliminarProyecto, añadirNota, actualizarNota, inscribirAlumno };
