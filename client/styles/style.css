@@ -119,6 +119,11 @@ body {
     opacity: 0.6;
 }
 
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+    -webkit-text-fill-color: var(--text-primary);
+}
+
 /* ── BOTONES ── */
 .btn-primary {
     background: var(--accent);

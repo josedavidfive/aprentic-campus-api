@@ -3,17 +3,17 @@ const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
 
 const register = async ({ email, password, rol }) => {
-    // Comprueba si ya existe un usuario con ese email
+    if (!email || !password) {
+        const err = new Error('Email y password son obligatorios');
+        err.status = 400;
+        throw err;
+    }
+
     const existe = await Usuario.findOne({ email });
     if (existe) throw new Error('Ya existe un usuario con ese email');
 
-    // Hashea la contraseña antes de guardarla (nunca se guarda en texto plano)
     const passwordHash = await bcrypt.hash(password, 10);
-
-    // Crea el usuario con la contraseña hasheada
     const usuario = await Usuario.create({ email, password: passwordHash, rol });
-
-    // Devuelve el usuario sin la contraseña
     return { _id: usuario._id, email: usuario.email, rol: usuario.rol };
 };
 
