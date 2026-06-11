@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const notaSchema = new mongoose.Schema({
   alumno: { type: mongoose.Schema.Types.ObjectId, ref: 'Alumno', required: true },
-  nota: { type: Number, required: true, min: 0, max: 10 },
-  estado: { type: String, enum: ['Apto', 'No Apto', 'Pendiente'], required: true },
-  profesor: { type: mongoose.Schema.Types.ObjectId, ref: 'Profesor', required: true }
+  nota: { type: Number, required: false, min: 0, max: 10 },
+  estado: { type: String, enum: ['Apto', 'No Apto', 'Pendiente'], required: true, default: 'Pendiente' },
+  profesor: { type: mongoose.Schema.Types.ObjectId, ref: 'Profesor', required: false }
 }, { timestamps: true })
 
 const proyectoSchema = new mongoose.Schema({

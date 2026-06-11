@@ -108,6 +108,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 
         setToken(data.token);
         setRol(data.usuario.rol);
+        localStorage.setItem('email', email);
         document.getElementById('user-email-display').textContent = email;
         document.getElementById('user-role-badge').textContent = data.usuario.rol;
         mostrarDashboard();
@@ -205,29 +206,15 @@ const editarAlumno = async (id, nombre, email, promocionId) => {
         fetchAPI('/proyectos')
     ]);
 
-    const opcionesPromocion = promociones?.map(p =>
-        `<option value="${p._id}" ${p._id === promocionId ? 'selected' : ''}>${p.nombre}</option>`
-    ).join('') || '';
-
-    // Solo proyectos de la misma promoción
     const proyectosDePromocion = proyectos?.filter(p =>
         p.promocion?._id?.toString() === promocionId.toString()
     ) || [];
 
-    const checkboxesProyectos = proyectosDePromocion.length > 0
-        ? `<table style="width:100%; border-collapse:collapse;">
-        ${proyectosDePromocion.map(p => {
-            const yaInscrito = p.notas?.some(n => n.alumno?._id?.toString() === id.toString());
-            return `<tr>
-                <td style="width:30px; padding:6px 0;">
-                    <input type="checkbox" value="${p._id}" ${yaInscrito ? 'checked disabled' : ''}>
-                </td>
-                <td style="padding:6px 0; font-size:0.875rem;">
-                    ${p.nombre} ${yaInscrito ? '<span style="color:var(--text-secondary)">(ya inscrito)</span>' : ''}
-                </td>
-            </tr>`;
-        }).join('')}
-       </table>`
+    const listaProyectos = proyectosDePromocion.length > 0
+        ? proyectosDePromocion.map(p => `
+            <div style="font-size:0.875rem; padding:4px 0; border-bottom:1px solid var(--border)">
+                • ${p.nombre}
+            </div>`).join('')
         : '<p class="confirm-msg">No hay proyectos en esta promoción</p>';
 
     abrirModal('Editar alumno', `
@@ -239,41 +226,24 @@ const editarAlumno = async (id, nombre, email, promocionId) => {
             <label>Email</label>
             <input type="email" id="f-email" value="${email}" required>
         </div>
-            <div class="field">
+        <div class="field">
             <label>Promoción</label>
-            <input type="text" value="${promociones?.find(p => p._id === promocionId)?.nombre || 'Sin promoción'}" 
+            <input type="text" value="${promociones?.find(p => p._id === promocionId)?.nombre || 'Sin promoción'}"
                 readonly style="opacity:0.5; cursor:not-allowed">
         </div>
         <div class="field">
-            <label>Inscribir en proyectos</label>
-            <div class="checkbox-list">${checkboxesProyectos}</div>
+            <label>Proyectos de la promoción</label>
+            <div>${listaProyectos}</div>
         </div>
     `, async () => {
-        // 1. Actualiza datos del alumno
         const body = {
             nombre: document.getElementById('f-nombre').value,
-            email: document.getElementById('f-email').value,
-            //promocion: document.getElementById('f-promocion').value
+            email: document.getElementById('f-email').value
         };
         const resAlumno = await fetchAPI(`/alumnos/${id}`, { method: 'PUT', body: JSON.stringify(body) });
         if (resAlumno?.error) return toast(resAlumno.error, 'error');
-
-        // 2. Inscribe en proyectos seleccionados (solo los nuevos, no los ya inscritos)
-        const seleccionados = [...document.querySelectorAll('.checkbox-list input:checked:not(:disabled)')]
-            .map(cb => cb.value);
-
-        for (const proyectoId of seleccionados) {
-            await fetchAPI(`/proyectos/${proyectoId}/alumnos`, {
-                method: 'POST',
-                body: JSON.stringify({ alumnoId: id })
-            });
-        }
-
         cerrarModal();
-        toast(seleccionados.length > 0
-            ? `Alumno actualizado e inscrito en ${seleccionados.length} proyecto(s)`
-            : 'Alumno actualizado'
-        );
+        toast('Alumno actualizado');
         cargarAlumnos();
     });
 };
@@ -323,18 +293,23 @@ document.getElementById('btn-nuevo-profesor').addEventListener('click', () => {
     if (!esAdmin()) return toast('Solo los administradores pueden crear profesores', 'error');
 
     abrirModal('Nuevo profesor', `
-        <div class="field">
-            <label>Nombre</label>
-            <input type="text" id="f-nombre" placeholder="Carlos Martínez" required>
-        </div>
-        <div class="field">
-            <label>Email</label>
-            <input type="email" id="f-email" placeholder="carlos@aprentic.com" required>
-        </div>
-    `, async () => {
+    <div class="field">
+        <label>Nombre</label>
+        <input type="text" id="f-nombre" placeholder="Carlos Martínez" required>
+    </div>
+    <div class="field">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="carlos@aprentic.com" required>
+    </div>
+    <div class="field">
+        <label>Contraseña</label>
+        <input type="password" id="f-password" placeholder="••••••••" required>
+    </div>
+`, async () => {
         const body = {
             nombre: document.getElementById('f-nombre').value,
-            email: document.getElementById('f-email').value
+            email: document.getElementById('f-email').value,
+            password: document.getElementById('f-password').value
         };
         const res = await fetchAPI('/profesores', { method: 'POST', body: JSON.stringify(body) });
         if (res?.error) return toast(res.error, 'error');
@@ -401,7 +376,7 @@ const cargarPromociones = async () => {
             </div>
             ${esAdmin() ? `
             <div class="data-card-actions">
-                <button class="btn-edit" onclick="editarPromocion('${p._id}', '${p.nombre}', '${p.fechaInicio}', '${p.fechaFin}', '${p.campus?._id || ''}')">Editar</button>
+                <button class="btn-edit" onclick="editarPromocion('${p._id}', '${p.nombre}', '${p.fechaInicio}', '${p.fechaFin}', '${p.campus?.nombre || 'Sin campus'}')">Editar</button>
                 <button class="btn-delete" onclick="eliminarPromocion('${p._id}', '${p.nombre}')">Eliminar</button>
             </div>` : ''}
         </div>
@@ -413,7 +388,10 @@ const isoFecha = (fecha) => fecha ? new Date(fecha).toISOString().split('T')[0] 
 
 document.getElementById('btn-nueva-promocion').addEventListener('click', async () => {
     if (!esAdmin()) return toast('Solo los administradores pueden crear promociones', 'error');
-    const campus = await fetchAPI('/promociones');
+    const promociones = await fetchAPI('/promociones');
+    const campus = [...new Map(promociones?.map(p => [p.campus?._id, p.campus]).filter(([id]) => id)).values()];
+    const opcionesCampus = campus.map(c => `<option value="${c._id}">${c.nombre}</option>`).join('');
+    //const opcionesCampus = campus?.map(c => `<option value="${c._id}">${c.nombre}</option>`).join('') || '';
 
     abrirModal('Nueva promoción', `
         <div class="field">
@@ -429,8 +407,11 @@ document.getElementById('btn-nueva-promocion').addEventListener('click', async (
             <input type="date" id="f-fin" required>
         </div>
         <div class="field">
-            <label>Campus (ID)</label>
-            <input type="text" id="f-campus" placeholder="ID del campus" required>
+            <label>Campus</label>
+            <select id="f-campus" required>
+                <option value="">Selecciona un campus</option>
+                ${opcionesCampus}
+            </select>
         </div>
     `, async () => {
         const body = {
@@ -447,7 +428,7 @@ document.getElementById('btn-nueva-promocion').addEventListener('click', async (
     });
 });
 
-const editarPromocion = (id, nombre, fechaInicio, fechaFin, campusId) => {
+const editarPromocion = async (id, nombre, fechaInicio, fechaFin, campusNombre) => {
     abrirModal('Editar promoción', `
         <div class="field">
             <label>Nombre</label>
@@ -462,15 +443,14 @@ const editarPromocion = (id, nombre, fechaInicio, fechaFin, campusId) => {
             <input type="date" id="f-fin" value="${isoFecha(fechaFin)}" required>
         </div>
         <div class="field">
-            <label>Campus (ID)</label>
-            <input type="text" id="f-campus" value="${campusId}" required>
+            <label>Campus</label>
+            <input type="text" value="${campusNombre}" readonly style="opacity:0.5; cursor:not-allowed">
         </div>
     `, async () => {
         const body = {
             nombre: document.getElementById('f-nombre').value,
             fechaInicio: document.getElementById('f-inicio').value,
-            fechaFin: document.getElementById('f-fin').value,
-            campus: document.getElementById('f-campus').value
+            fechaFin: document.getElementById('f-fin').value
         };
         const res = await fetchAPI(`/promociones/${id}`, { method: 'PUT', body: JSON.stringify(body) });
         if (res?.error) return toast(res.error, 'error');
@@ -618,7 +598,29 @@ const gestionarNotas = async (proyectoId, proyectoNombre, promocionId) => {
         `<option value="${a._id}">${a.nombre}</option>`
     ).join('');
 
+    // BLOQUE PARA VER NOTAS (EXISTENTES)
+    // Carga el proyecto para ver sus notas actuales
+    const proyecto = await fetchAPI(`/proyectos/${proyectoId}`);
+    const notasExistentes = proyecto?.notas?.length > 0
+        ? `<div class="field">
+        <label>Notas registradas</label>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:0.5rem">
+            ${proyecto.notas.map(n => `
+                <tr>
+                    <td style="padding:4px 0; font-size:0.8rem;">${n.alumno?.nombre || 'Alumno'}</td>
+                    <td style="padding:4px 0; font-size:0.8rem; text-align:center;">${n.nota ?? '—'}</td>
+                    <td style="padding:4px 0; font-size:0.8rem; text-align:right; color:${n.estado === 'Apto' ? 'var(--accent)' : n.estado === 'No Apto' ? 'var(--danger)' : 'var(--text-secondary)'}">
+                        ${n.estado}
+                    </td>
+                </tr>
+            `).join('')}
+        </table>
+       </div>
+       <hr style="border-color:var(--border); margin-bottom:1rem">`
+        : '';
+
     abrirModal(`Añadir nota — ${proyectoNombre}`, `
+        ${notasExistentes}
         <div class="field">
             <label>Alumno</label>
             <select id="f-alumno" required>
@@ -715,6 +717,8 @@ const cargarRankingNoAptos = async () => {
 
 // ── INICIO ──
 if (getToken()) {
+    document.getElementById('user-role-badge').textContent = getRol() || 'usuario';
+    document.getElementById('user-email-display').textContent = localStorage.getItem('email') || '';
     mostrarDashboard();
     cargarSeccion('alumnos');
 } else {
