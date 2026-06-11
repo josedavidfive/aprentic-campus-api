@@ -16,7 +16,7 @@ const requireRole = require('../middlewares/role.required');
  *       403:
  *         description: Sin permisos
  */
-router.get('/', authRequired, requireRole('admin'), profesoresController.getAll);
+router.get('/', authRequired, profesoresController.getAll);
 
 /**
  * @swagger
@@ -36,7 +36,7 @@ router.get('/', authRequired, requireRole('admin'), profesoresController.getAll)
  *       404:
  *         description: Profesor no encontrado
  */
-router.get('/:id', authRequired, requireRole('admin'), profesoresController.getById);
+router.get('/:id', authRequired, profesoresController.getById);
 
 /**
  * @swagger
