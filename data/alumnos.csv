@@ -1,0 +1,21 @@
+nombre_alumno,email_alumno,campus,promocion,fecha_inicio_promocion,fecha_fin_promocion,nombre_profesor,email_profesor,nombre_proyecto,nota_proyecto,estado
+Ana García López,ana.garcia@email.com,Sevilla,Fullstack 2024-1,2024-01-15,2024-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto E-commerce,8.5,Apto
+Luis Fernández Ruiz,luis.fernandez@email.com,Sevilla,Fullstack 2024-1,2024-01-15,2024-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto E-commerce,4.2,No Apto
+María Sánchez Torres,maria.sanchez@email.com,Málaga,Fullstack 2024-1,2024-01-15,2024-06-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Blog,7.8,Apto
+Pedro Jiménez Mora,pedro.jimenez@email.com,Málaga,Fullstack 2024-1,2024-01-15,2024-06-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Blog,3.9,No Apto
+Sofía Díaz Castro,sofia.diaz@email.com,Sevilla,Fullstack 2024-1,2024-01-15,2024-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto E-commerce,6.5,Apto
+Javier López Vega,javier.lopez@email.com,Málaga,Fullstack 2024-2,2024-07-01,2024-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Portfolio,5.0,Apto
+Carmen Romero Gil,carmen.romero@email.com,Sevilla,Fullstack 2024-2,2024-07-01,2024-12-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto Portfolio,3.5,No Apto
+Diego Moreno Paz,diego.moreno@email.com,Sevilla,Fullstack 2024-2,2024-07-01,2024-12-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto Red Social,9.0,Apto
+Elena Navarro Cid,elena.navarro@email.com,Málaga,Fullstack 2024-2,2024-07-01,2024-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Tienda,4.8,No Apto
+Roberto Serrano Mas,roberto.serrano@email.com,Málaga,Fullstack 2024-2,2024-07-01,2024-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Portfolio,7.2,Apto
+Isabel Molina Rey,isabel.molina@email.com,Sevilla,Fullstack 2025-1,2025-01-15,2025-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto API REST,8.0,Apto
+Alejandro Cruz Leal,alejandro.cruz@email.com,Málaga,Fullstack 2025-1,2025-01-15,2025-06-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Dashboard,3.2,No Apto
+Lucía Herrera Vidal,lucia.herrera@email.com,Sevilla,Fullstack 2025-1,2025-01-15,2025-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto CRM,6.8,Apto
+Miguel Ángel Torres,miguelangel.torres@email.com,Málaga,Fullstack 2025-1,2025-01-15,2025-06-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Dashboard,4.5,No Apto
+Paula Castillo Bru,paula.castillo@email.com,Sevilla,Fullstack 2025-1,2025-01-15,2025-06-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto API REST,7.5,Apto
+Raúl Iglesias Font,raul.iglesias@email.com,Málaga,Fullstack 2025-2,2025-07-01,2025-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto App Móvil,5.5,Apto
+Nuria Blanco Soler,nuria.blanco@email.com,Sevilla,Fullstack 2025-2,2025-07-01,2025-12-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto Marketplace,3.8,No Apto
+Sergio Ramos Pons,sergio.ramos@email.com,Málaga,Fullstack 2025-2,2025-07-01,2025-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Chat,8.8,Apto
+Marta Vargas Lora,marta.vargas@email.com,Sevilla,Fullstack 2025-2,2025-07-01,2025-12-15,Carlos Martínez,carlos.martinez@aprentic.com,Proyecto App Móvil,4.1,No Apto
+Adrián Peña Soto,adrian.pena@email.com,Málaga,Fullstack 2025-2,2025-07-01,2025-12-15,Laura Gómez,laura.gomez@aprentic.com,Proyecto Marketplace,7.9,Apto
