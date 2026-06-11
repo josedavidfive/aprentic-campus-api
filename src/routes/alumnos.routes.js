@@ -84,7 +84,7 @@ router.post('/', authRequired, requireRole('admin'), alumnosController.create);
  *       404:
  *         description: Alumno no encontrado
  */
-router.put('/:id', authRequired, requireRole('admin'), alumnosController.update);
+router.put('/:id', authRequired, requireRole('admin', 'profesor'), alumnosController.update);
 
 /**
  * @swagger

@@ -9,6 +9,13 @@ const analyticsRoutes = require('./routes/analytics.routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { specs, swaggerUi } = require('./docs/swagger');
 
+require('./models/Campus');
+require('./models/Usuario');
+require('./models/Alumno');
+require('./models/Profesor');
+require('./models/Promocion');
+require('./models/Proyecto');
+
 const app = express();
 
 // Middlewares globales

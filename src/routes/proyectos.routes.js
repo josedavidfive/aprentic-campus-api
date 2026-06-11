@@ -52,7 +52,7 @@ router.get('/:id', authRequired, proyectosController.getById);
  *       201:
  *         description: Proyecto creado
  */
-router.post('/', authRequired, requireRole('admin'), proyectosController.create);
+router.post('/', authRequired, requireRole('admin', 'profesor'), proyectosController.create);
 
 /**
  * @swagger
