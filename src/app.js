@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const authRoutes = require('./routes/auth.routes');
 const alumnosRoutes = require('./routes/alumnos.routes');
 const profesoresRoutes = require('./routes/profesores.routes');
@@ -11,6 +12,7 @@ const { specs, swaggerUi } = require('./docs/swagger');
 const app = express();
 
 // Middlewares globales
+app.use(cors());
 app.use(express.json());
 
 // Swagger
