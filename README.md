@@ -331,7 +331,6 @@ Los tests de integracion usan `mongodb-memory-server`, por lo que no dependen de
 
 ## Posibles mejoras futuras
 
-- Anadir validaciones de entrada con `express-validator`.
 - Crear CRUD especifico para campus.
 - Anadir paginacion y filtros en listados.
 - Mejorar la sincronizacion entre profesor y usuario.
