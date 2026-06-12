@@ -3,6 +3,7 @@ const router = express.Router();
 const alumnosController = require('../controllers/alumnos.controller');
 const authRequired = require('../middlewares/auth.required');
 const requireRole = require('../middlewares/role.required');
+const { validarAlumno } = require('../middlewares/validators');
 
 /**
  * @swagger
@@ -58,7 +59,7 @@ router.get('/:id', authRequired, alumnosController.getById);
  *       403:
  *         description: Sin permisos
  */
-router.post('/', authRequired, requireRole('admin'), alumnosController.create);
+router.post('/', authRequired, requireRole('admin'), validarAlumno, alumnosController.create);
 
 /**
  * @swagger
@@ -84,7 +85,7 @@ router.post('/', authRequired, requireRole('admin'), alumnosController.create);
  *       404:
  *         description: Alumno no encontrado
  */
-router.put('/:id', authRequired, requireRole('admin', 'profesor'), alumnosController.update);
+router.put('/:id', authRequired, requireRole('admin', 'profesor'), validarAlumno, alumnosController.update);
 
 /**
  * @swagger
