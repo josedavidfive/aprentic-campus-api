@@ -52,7 +52,7 @@ router.get('/:id', authRequired, proyectosController.getById);
  *       201:
  *         description: Proyecto creado
  */
-router.post('/', authRequired, requireRole('admin', 'profesor'), proyectosController.create);
+router.post('/', authRequired, requireRole('admin', 'profesor'), validarProyecto, proyectosController.create);
 
 /**
  * @swagger
@@ -124,7 +124,7 @@ router.delete('/:id', authRequired, requireRole('admin'), proyectosController.re
  *       404:
  *         description: Proyecto no encontrado
  */
-router.post('/:id/notas', authRequired, requireRole('admin', 'profesor'), proyectosController.addNota);
+router.post('/:id/notas', authRequired, requireRole('admin', 'profesor'), validarNota, proyectosController.addNota);
 
 /**
  * @swagger

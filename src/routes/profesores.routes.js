@@ -3,6 +3,7 @@ const router = express.Router();
 const profesoresController = require('../controllers/profesores.controller');
 const authRequired = require('../middlewares/auth.required');
 const requireRole = require('../middlewares/role.required');
+const { validarProfesor } = require('../middlewares/validators');
 
 /**
  * @swagger
@@ -54,7 +55,7 @@ router.get('/:id', authRequired, profesoresController.getById);
  *       201:
  *         description: Profesor creado
  */
-router.post('/', authRequired, requireRole('admin'), profesoresController.create);
+router.post('/', authRequired, requireRole('admin'), validarProfesor, profesoresController.create);
 
 /**
  * @swagger
@@ -80,7 +81,7 @@ router.post('/', authRequired, requireRole('admin'), profesoresController.create
  *       404:
  *         description: Profesor no encontrado
  */
-router.put('/:id', authRequired, requireRole('admin'), profesoresController.update);
+router.put('/:id', authRequired, requireRole('admin'), validarProfesor, profesoresController.update);
 
 /**
  * @swagger
