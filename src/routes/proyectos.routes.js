@@ -3,6 +3,8 @@ const router = express.Router();
 const proyectosController = require('../controllers/proyectos.controller');
 const authRequired = require('../middlewares/auth.required');
 const requireRole = require('../middlewares/role.required');
+const { validarProyecto, validarNota } = require('../middlewares/validators');
+
 
 /**
  * @swagger
